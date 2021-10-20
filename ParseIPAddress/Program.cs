@@ -31,6 +31,7 @@ namespace ParseIPAddress
       catch (Exception)
       {
         Display("there was an error while trying to read the file");
+        return;
       }
 
       string[] fileContentArray = fileContent.Split(':');
