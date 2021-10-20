@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 
 namespace ParseIPAddress
 {
@@ -38,8 +39,18 @@ namespace ParseIPAddress
       string ipAddress = fileContentArray[1];
       ipAddress = ipAddress.Replace("with subnet", "").Trim();
       Display($"The IP address is {ipAddress}");
-      Display("Now let's ping this IP address in a new window");
-      StartProcess("ping", ipAddress);
+      bool validIpAddress = IsIpAddressValid(ipAddress);
+      if (validIpAddress)
+      {
+        Display($"The IP address is valid so we are pinging it");
+        Display("Now let's ping this IP address in a new window");
+        StartProcess("ping", ipAddress);
+      }
+      else
+      {
+        Display($"The IP address is not valid so we are not pinging it");
+      }
+      
       Display("Press any key to exit:");
       Console.ReadKey();
     }
@@ -58,6 +69,14 @@ namespace ParseIPAddress
       };
 
       task.Start();
+    }
+
+    public static bool IsIpAddressValid(string ipAddress)
+    {
+      bool result = false;
+      IPAddress ipAddress2;
+      result = IPAddress.TryParse(ipAddress, out ipAddress2);
+      return result;
     }
   }
 }
